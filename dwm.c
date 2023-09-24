@@ -274,9 +274,9 @@ static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
 
 /* variables */
-static Systray *systray = NULL;
 static const char autostartblocksh[] = "autostart_blocking.sh";
 static const char autostartsh[] = "autostart.sh";
+static Systray *systray = NULL;
 static const char broken[] = "broken";
 static const char dwmdir[] = "dwm";
 static const char localshare[] = ".local/share";
@@ -921,7 +921,7 @@ focus(Client *c)
 		if (c->isurgent)
 			seturgent(c, 0);
 		detachstack(c);
-		attachstack(c);
+		attachstack(c);		
 		grabbuttons(c, 1);
 		XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
 		setfocus(c);
@@ -1624,10 +1624,14 @@ void
 resizeclient(Client *c, int x, int y, int w, int h)
 {
 	XWindowChanges wc;
+
 	unsigned int n;
 	unsigned int gapoffset;
 	unsigned int gapincr;
 	Client *nbc;
+
+	if (c->beingmoved)
+		return;
 
 	wc.border_width = c->bw;
 
@@ -1653,10 +1657,6 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	c->oldy = c->y; c->y = wc.y = y + gapoffset;
 	c->oldw = c->w; c->w = wc.width = w - gapincr;
 	c->oldh = c->h; c->h = wc.height = h - gapincr;
-
-
-	if (c->beingmoved)
-		return;
 
 	XConfigureWindow(dpy, c->win, CWX|CWY|CWWidth|CWHeight|CWBorderWidth, &wc);
 	configure(c);
