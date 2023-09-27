@@ -70,6 +70,9 @@ static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_r,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,             		XK_Return, spawn,          {.v = termcmd } },
+	{ 0,                            0x1008ff11, spawn,         SHCMD ("amixer sset PCM 5%- unmute")},
+	{ 0,                            0x1008ff12, spawn,         SHCMD ("amixer sset PCM $(amixer get PCM | grep -q '\\[on\\]' && echo 'mute' || echo 'unmute')")},
+	{ 0,                            0x1008ff13, spawn,         SHCMD ("amixer sset PCM 5%+ unmute")},
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
